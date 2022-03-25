@@ -80,6 +80,7 @@ export function CitiesProvider({ children }: Props) {
     data: GooglePlaceData,
     details: GooglePlaceDetail | null
   ) {
+    setLoading(true);
     if (details) {
       const { lat, lng } = details.geometry.location;
       const response = await getWeatherFromLatLng(lat, lng);
