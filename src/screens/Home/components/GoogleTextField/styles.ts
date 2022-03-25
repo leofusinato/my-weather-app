@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     overflow: "visible",
   },
   textInput: {
+    fontFamily: theme.fonts.regular400,
     borderColor: theme.colors.gray,
     borderWidth: 0.5,
     borderRadius: 8,

@@ -8,4 +8,8 @@ export const theme = {
     orange: "#F28200",
     red: "#ED0952",
   },
+  fonts: {
+    regular400: "Roboto_400Regular",
+    bold700: "Roboto_700Bold",
+  },
 };

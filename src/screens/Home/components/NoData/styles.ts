@@ -11,9 +11,10 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     color: theme.colors.black,
-    fontWeight: "bold",
+    fontFamily: theme.fonts.bold700,
   },
   subtitle: {
+    fontFamily: theme.fonts.regular400,
     fontSize: 16,
     textAlign: "center",
     color: theme.colors.gray,

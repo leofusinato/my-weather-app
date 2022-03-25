@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   description: {
+    fontFamily: theme.fonts.regular400,
     marginVertical: 16,
     fontSize: 12,
     color: theme.colors.black,

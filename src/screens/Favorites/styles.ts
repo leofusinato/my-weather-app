@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     padding: 16,
   },
   noDataText: {
+    fontFamily: theme.fonts.regular400,
     marginTop: 16,
     textAlign: "center",
     fontSize: 12,

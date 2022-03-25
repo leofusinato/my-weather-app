@@ -32,7 +32,7 @@ export function Favorites() {
           })
         ) : (
           <Text style={styles.noDataText}>
-            Você ainda não possui nenhuma cidade favoritada
+            Você não possui nenhuma cidade favoritada
           </Text>
         )}
       </ScrollView>

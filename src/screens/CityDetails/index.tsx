@@ -3,6 +3,7 @@ import { Text, ScrollView, ActivityIndicator } from "react-native";
 import { CityCard } from "../../components/CityCard";
 import { WeatherForecastData } from "../../global/models/weather";
 import { CityDetailsNavigationProps } from "../../global/routes.types";
+import { theme } from "../../global/styles";
 import { getFiveDaysForecastFromLatLng } from "../../services/openweather";
 import * as dateUtils from "../../utils/date";
 import { capitalize } from "../../utils/string";
@@ -17,18 +18,18 @@ export function CityDetails({ route }: CityDetailsNavigationProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     (async () => {
       await getForecast();
     })();
-    setLoading(false);
   }, []);
 
   async function getForecast(): Promise<void> {
+    setLoading(true);
     const response = await getFiveDaysForecastFromLatLng(city.lat, city.lng);
     if (response) {
       setForecastList(response);
     }
+    setLoading(false);
   }
 
   return (
@@ -37,7 +38,11 @@ export function CityDetails({ route }: CityDetailsNavigationProps) {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <Text style={styles.description}>Previsão para os próximos 7 dias</Text>
         {loading ? (
-          <ActivityIndicator />
+          <ActivityIndicator
+            size={"large"}
+            color={theme.colors.primary}
+            style={{ marginTop: 16 }}
+          />
         ) : (
           forecastList &&
           forecastList.map((data, index) => {
