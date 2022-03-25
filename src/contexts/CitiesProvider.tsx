@@ -22,13 +22,13 @@ type Props = {
 
 type CitiesContextData = {
   cities: CityProps[];
+  refreshData: () => Promise<void>;
   loading: boolean;
   findCity: (
     data: GooglePlaceData,
     details: GooglePlaceDetail | null
   ) => Promise<void>;
-  addCity: (city: CityProps) => Promise<boolean>;
-  removeCity: (city: CityProps) => Promise<void>;
+  removeCity: (cityToRemove: CityProps) => Promise<void>;
   toggleFavorite: (city: CityProps) => Promise<void>;
 };
 
@@ -40,14 +40,39 @@ export function CitiesProvider({ children }: Props) {
 
   useEffect(() => {
     (async () => {
+      if (loading) return;
+      setLoading(true);
       await loadInitialData();
+      setLoading(false);
     })();
   }, []);
 
+  async function refreshData() {
+    setLoading(true);
+    setCities([]);
+    await loadInitialData();
+    setLoading(false);
+  }
+
   async function loadInitialData() {
-    const data = await asyncStorage.getCities();
-    if (data) {
-      setCities(data);
+    const storageCities = await asyncStorage.getCities();
+    if (storageCities) {
+      // we need to update the forecast because the app can be opened after some hours and some infos can be different
+      storageCities.map(async (city) => {
+        const currentWeatherResponse = await getWeatherFromLatLng(
+          city.lat,
+          city.lng
+        );
+        if (currentWeatherResponse) {
+          city.description = capitalize(
+            currentWeatherResponse.weather[0].description
+          );
+          city.temp = Math.round(currentWeatherResponse.main.temp);
+          city.tempMax = Math.round(currentWeatherResponse.main.temp_max);
+          city.tempMin = Math.round(currentWeatherResponse.main.temp_min);
+        }
+        setCities((old) => [...old, city]);
+      });
     }
   }
 
@@ -55,26 +80,29 @@ export function CitiesProvider({ children }: Props) {
     data: GooglePlaceData,
     details: GooglePlaceDetail | null
   ) {
-    setLoading(true);
     if (details) {
       const { lat, lng } = details.geometry.location;
       const response = await getWeatherFromLatLng(lat, lng);
       if (response) {
-        const city = data.structured_formatting.main_text.trim();
-        const otherInfos = data.structured_formatting.secondary_text.split(",");
+        const cityToAdd = data.structured_formatting.main_text.trim();
+        const otherInfos = data.structured_formatting.secondary_text
+          ? data.structured_formatting.secondary_text.split(",")
+          : data.structured_formatting.main_text.split(",");
         const country = otherInfos[otherInfos.length - 1].trim();
-        const added = await addCity({
-          name: city,
-          country,
-          description: capitalize(response.weather[0].description),
-          favorite: false,
-          temp: Math.round(response.main.temp),
-          tempMin: Math.round(response.main.temp_min),
-          tempMax: Math.round(response.main.temp_max),
-          lat,
-          lng,
-        });
-        if (!added) {
+        const exists = cities.find((city) => city.name === cityToAdd);
+        if (!exists) {
+          await addCity({
+            name: cityToAdd,
+            country,
+            description: capitalize(response.weather[0].description),
+            favorite: false,
+            temp: Math.round(response.main.temp),
+            tempMin: Math.round(response.main.temp_min),
+            tempMax: Math.round(response.main.temp_max),
+            lat,
+            lng,
+          });
+        } else {
           Alert.alert("", "Esta cidade já foi adicionada");
         }
       }
@@ -82,15 +110,10 @@ export function CitiesProvider({ children }: Props) {
     setLoading(false);
   }
 
-  async function addCity(cityToAdd: CityProps): Promise<boolean> {
-    const exists = cities.find((city) => city.name === cityToAdd.name);
-    if (!exists) {
-      const newCities = [...cities, cityToAdd];
-      setCities(newCities);
-      await asyncStorage.setCities(newCities);
-      return true;
-    }
-    return false;
+  async function addCity(cityToAdd: CityProps): Promise<void> {
+    const newCities = [...cities, cityToAdd];
+    await asyncStorage.setCities(newCities);
+    setCities(newCities);
   }
 
   async function removeCity(cityToRemove: CityProps): Promise<void> {
@@ -119,7 +142,14 @@ export function CitiesProvider({ children }: Props) {
 
   return (
     <CitiesContext.Provider
-      value={{ cities, loading, findCity, addCity, removeCity, toggleFavorite }}
+      value={{
+        refreshData,
+        cities,
+        loading,
+        findCity,
+        removeCity,
+        toggleFavorite,
+      }}
     >
       {children}
     </CitiesContext.Provider>

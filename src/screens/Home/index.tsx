@@ -26,17 +26,17 @@ export default function Home() {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           {loading ? (
-            <View style={styles.fullCenter}>
-              <ActivityIndicator size={"large"} color={theme.colors.primary} />
-            </View>
-          ) : cities.length == 0 ? (
-            <NoData />
-          ) : (
+            <ActivityIndicator
+              size={"large"}
+              color={theme.colors.primary}
+              style={styles.fullCenter}
+            />
+          ) : cities.length > 0 ? (
             <>
-              {cities.map((city) => {
+              {cities.map((city, index) => {
                 return (
                   <CityCard
-                    key={city.name}
+                    key={index}
                     title={city.name}
                     description={city.country}
                     data={city}
@@ -44,6 +44,8 @@ export default function Home() {
                 );
               })}
             </>
+          ) : (
+            <NoData />
           )}
         </ScrollView>
       </View>

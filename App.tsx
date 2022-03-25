@@ -17,9 +17,11 @@ export default function App() {
     Roboto_700Bold,
   });
 
-  return !fontsLoaded ? (
-    <AppLoading />
-  ) : (
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  return (
     <NavigationContainer>
       <CitiesProvider>
         <StackRoutes />
