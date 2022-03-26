@@ -11,7 +11,7 @@ export default function NoData() {
         Parece que você ainda não adicionou uma cidade
       </Text>
       <Text style={styles.subtitle}>
-        Tente adicionar uma cidade usando o botão de busca
+        Tente adicionar uma cidade buscando pelo seu nome
       </Text>
     </View>
   );
