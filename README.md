@@ -24,3 +24,4 @@ Para iniciar a aplicação com Expo, basta executar o comando
 ```bash
 expo start
 ```
+Para o funcionamento completo do app é necessário ter um arquivo chamado ".env", que pode ser criado a partir do arquivo ".env.example". Nele será necessário informar a chave da API do Google Places e também da API de previsão do tempo da <a href="https://openweathermap.org/api">Open Weather Map</a>.
