@@ -6,10 +6,9 @@ import NoData from "./components/NoData";
 import { CityCard } from "../../components/CityCard";
 import { GoogleTextField } from "./components/GoogleTextField";
 
-// import { useCities } from "../../contexts/CitiesProvider";
+import useCities from "../../stores/cities";
 import { theme } from "../../global/styles";
 import { styles } from "./styles";
-import useCities from "../../stores/cities";
 
 export default function Home() {
   const { cities, loading } = useCities((state) => state.state);

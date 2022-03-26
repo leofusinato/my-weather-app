@@ -7,11 +7,9 @@ import {
   GooglePlacesAutocompleteRef,
 } from "react-native-google-places-autocomplete";
 
-// import { useCities } from "../../../../contexts/CitiesProvider";
-
+import useCities from "../../../../stores/cities";
 import { theme } from "../../../../global/styles";
 import { styles } from "./styles";
-import useCities from "../../../../stores/cities";
 
 export function GoogleTextField() {
   const { findCity } = useCities((state) => state.actions);

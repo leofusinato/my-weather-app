@@ -138,13 +138,13 @@ const useCities = create<State>((set, get) => {
           setState(({ state }: State) => {
             state.cities[find].favorite = !state.cities[find].favorite;
           });
-          // const citiesToSort = getCities();
-          // const sortedCities = citiesToSort.sort((a) => {
-          //   return a.favorite ? -1 : 1;
-          // });
-          // setCities(sortedCities);
-          await asyncStorage.setCities(getCities());
+          setState(({ state }: State) => {
+            state.cities.sort((a) => {
+              return a.favorite ? -1 : 1;
+            });
+          });
         }
+        await asyncStorage.setCities(getCities());
       },
     },
   };

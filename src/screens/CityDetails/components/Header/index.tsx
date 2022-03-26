@@ -5,12 +5,11 @@ import { Menu, MenuItem } from "react-native-material-menu";
 
 import HeaderBase from "../../../../components/HeaderBase";
 
+import useCities from "../../../../stores/cities";
 import { CityProps } from "../../../../global/models/city";
-// import { useCities } from "../../../../contexts/CitiesProvider";
 import { useNavigation } from "@react-navigation/native";
 import { theme } from "../../../../global/styles";
 import { styles } from "./styles";
-import useCities from "../../../../stores/cities";
 
 type Props = {
   city: CityProps;

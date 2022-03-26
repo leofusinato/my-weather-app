@@ -4,14 +4,13 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { CityProps } from "../../global/models/city";
 
-// import { useCities } from "../../contexts/CitiesProvider";
+import useCities from "../../stores/cities";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackParamList } from "../../global/routes.types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { theme } from "../../global/styles";
 import { styles } from "./styles";
-import useCities from "../../stores/cities";
 
 type Props = {
   title: string;

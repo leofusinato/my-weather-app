@@ -1,11 +1,10 @@
 import React from "react";
-
 import { ScrollView, Text } from "react-native";
+
 import { CityCard } from "../../components/CityCard";
-import useCities from "../../stores/cities";
-// import { useCities } from "../../contexts/CitiesProvider";
 import { Header } from "./components/Header";
 
+import useCities from "../../stores/cities";
 import { styles } from "./styles";
 
 export function Favorites() {
