@@ -4,7 +4,7 @@ import { CityCard } from "../../components/CityCard";
 import { WeatherForecastData } from "../../global/models/weather";
 import { CityDetailsNavigationProps } from "../../global/routes.types";
 import { theme } from "../../global/styles";
-import { getFiveDaysForecastFromLatLng } from "../../services/openweather";
+import { getSevenDaysForecastFromLatLng } from "../../services/openweather";
 import * as dateUtils from "../../utils/date";
 import { capitalize } from "../../utils/string";
 
@@ -25,7 +25,7 @@ export function CityDetails({ route }: CityDetailsNavigationProps) {
 
   async function getForecast(): Promise<void> {
     setLoading(true);
-    const response = await getFiveDaysForecastFromLatLng(city.lat, city.lng);
+    const response = await getSevenDaysForecastFromLatLng(city.lat, city.lng);
     if (response) {
       setForecastList(response);
     }

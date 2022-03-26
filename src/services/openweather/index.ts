@@ -25,7 +25,7 @@ export async function getWeatherFromLatLng(
   return null;
 }
 
-export async function getFiveDaysForecastFromLatLng(
+export async function getSevenDaysForecastFromLatLng(
   lat: number,
   lon: number
 ): Promise<WeatherForecastData[] | null> {
