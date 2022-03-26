@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, ScrollView, StatusBar, View } from "react-native";
 
 import { Header } from "./components/Header";
@@ -6,12 +6,20 @@ import NoData from "./components/NoData";
 import { CityCard } from "../../components/CityCard";
 import { GoogleTextField } from "./components/GoogleTextField";
 
-import { useCities } from "../../contexts/CitiesProvider";
+// import { useCities } from "../../contexts/CitiesProvider";
 import { theme } from "../../global/styles";
 import { styles } from "./styles";
+import useCities from "../../stores/cities";
 
 export default function Home() {
-  const { cities, loading } = useCities();
+  const { cities, loading } = useCities((state) => state.state);
+  const { loadInitialData } = useCities((state) => state.actions);
+
+  useEffect(() => {
+    (async () => {
+      await loadInitialData();
+    })();
+  }, []);
 
   return (
     <>

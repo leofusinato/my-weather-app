@@ -2,13 +2,14 @@ import React from "react";
 
 import { ScrollView, Text } from "react-native";
 import { CityCard } from "../../components/CityCard";
-import { useCities } from "../../contexts/CitiesProvider";
+import useCities from "../../stores/cities";
+// import { useCities } from "../../contexts/CitiesProvider";
 import { Header } from "./components/Header";
 
 import { styles } from "./styles";
 
 export function Favorites() {
-  const { cities } = useCities();
+  const { cities } = useCities((state) => state.state);
   const favorites = cities.filter((city) => {
     if (city.favorite) {
       return city;

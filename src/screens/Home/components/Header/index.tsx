@@ -4,16 +4,17 @@ import { Feather } from "@expo/vector-icons";
 
 import HeaderBase from "../../../../components/HeaderBase";
 
-import { useCities } from "../../../../contexts/CitiesProvider";
+// import { useCities } from "../../../../contexts/CitiesProvider";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackParamList } from "../../../../global/routes.types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { styles } from "./styles";
 import { theme } from "../../../../global/styles";
+import useCities from "../../../../stores/cities";
 
 export function Header() {
-  const { refreshData } = useCities();
+  const { refreshData } = useCities((state) => state.actions);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<AppStackParamList, "Home">>();
