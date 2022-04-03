@@ -1,4 +1,5 @@
 export type CityProps = {
+  id: string;
   name: string;
   country: string;
   description: string;

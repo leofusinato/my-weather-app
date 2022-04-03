@@ -4,8 +4,9 @@ import React, {
   createContext,
   useContext,
   ReactNode,
+  useCallback,
 } from "react";
-import { Alert } from "react-native";
+import uuid from "react-native-uuid";
 
 import {
   GooglePlaceData,
@@ -47,14 +48,14 @@ export function CitiesProvider({ children }: Props) {
     })();
   }, []);
 
-  async function refreshData() {
+  const refreshData = useCallback(async () => {
     setLoading(true);
     setCities([]);
     await loadInitialData();
     setLoading(false);
-  }
+  }, []);
 
-  async function loadInitialData() {
+  const loadInitialData = useCallback(async () => {
     const storageCities = await asyncStorage.getCities();
     if (storageCities) {
       // we need to update the forecast because the app can be opened after some hours and some infos can be different
@@ -74,7 +75,7 @@ export function CitiesProvider({ children }: Props) {
         setCities((old) => [...old, city]);
       });
     }
-  }
+  }, []);
 
   async function findCity(
     data: GooglePlaceData,
@@ -90,22 +91,19 @@ export function CitiesProvider({ children }: Props) {
           ? data.structured_formatting.secondary_text.split(",")
           : data.structured_formatting.main_text.split(",");
         const country = otherInfos[otherInfos.length - 1].trim();
-        const exists = cities.find((city) => city.name === cityToAdd);
-        if (!exists) {
-          await addCity({
-            name: cityToAdd,
-            country,
-            description: capitalize(response.weather[0].description),
-            favorite: false,
-            temp: Math.round(response.main.temp),
-            tempMin: Math.round(response.main.temp_min),
-            tempMax: Math.round(response.main.temp_max),
-            lat,
-            lng,
-          });
-        } else {
-          Alert.alert("", "Esta cidade já foi adicionada");
-        }
+        console.log(uuid.v4().toString());
+        await addCity({
+          id: uuid.v4().toString(),
+          name: cityToAdd,
+          country,
+          description: capitalize(response.weather[0].description),
+          favorite: false,
+          temp: Math.round(response.main.temp),
+          tempMin: Math.round(response.main.temp_min),
+          tempMax: Math.round(response.main.temp_max),
+          lat,
+          lng,
+        });
       }
     }
     setLoading(false);
@@ -119,7 +117,7 @@ export function CitiesProvider({ children }: Props) {
 
   async function removeCity(cityToRemove: CityProps): Promise<void> {
     const newCities = cities.filter((city) => {
-      if (city.name !== cityToRemove.name) {
+      if (city.id !== cityToRemove.id) {
         return city;
       }
     });
@@ -129,7 +127,7 @@ export function CitiesProvider({ children }: Props) {
 
   async function toggleFavorite(cityToFavorite: CityProps): Promise<void> {
     const newCities = cities.map((city) => {
-      if (city.name == cityToFavorite.name) {
+      if (city.id == cityToFavorite.id) {
         city.favorite = !city.favorite;
       }
       return city;
